@@ -1,9 +1,10 @@
-import pygame.draw
+from abstractblock import Block
 
 
-class Board:
-    def __init__(self, size):
-        self.board_rect = 0, 0, size[0] * 0.75, size[1]
+class Board(Block):
+    def __init__(self, size, x0, y0, prop_x, prop_y):
+        super().__init__(size, x0, y0, prop_x, prop_y)
+        self.color = (0, 60, 0)
 
     def render(self, screen):
-        pygame.draw.rect(screen, (20, 20, 20), self.board_rect)
+        super().render(screen)
