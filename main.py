@@ -6,7 +6,7 @@ size = width, height = 800, 500
 screen = pygame.display.set_mode(size)
 clock = pygame.time.Clock()
 running = True
-game_board = board.Board(size, 0, 0, 0.75, 1)
+game_board = board.Board(size, (0, 0), (0.75, 1))
 
 
 while running:
