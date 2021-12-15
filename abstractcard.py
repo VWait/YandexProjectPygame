@@ -1,12 +1,18 @@
 from abc import ABC, abstractmethod
+
+import pygame.draw
+
 import LoadImage
 
 
 class Card(ABC):
     @abstractmethod
-    def __init__(self, file_name, value):
-        self.image = LoadImage.load_image(file_name)
-        self.value = value
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def render(self, screen):
+        pass
 
     @abstractmethod
     def move(self):
