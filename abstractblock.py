@@ -13,3 +13,6 @@ class Block(ABC):
     @abstractmethod
     def render(self, screen):
         pygame.draw.rect(screen, self.color, self.block_pos0 + self.block_size)
+
+    def get_xy_by_prop(self, props):
+        return tuple(map(lambda val, p: val * p, self.block_size, props))
