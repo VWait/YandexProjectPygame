@@ -1,6 +1,6 @@
 import pygame
 import board
-from cards import Card
+import cards
 
 
 size = width, height = 800, 500
@@ -10,7 +10,9 @@ running = True
 game_board = board.Board(size, (0, 0), (0.75, 1))
 all_sprites = pygame.sprite.Group()
 for i in range(2):
-    Card(all_sprites, 'card1.png', game_board.get_xy_by_prop((0.35 + i * 0.15, 0.7)))
+    cards.Card3(all_sprites, game_board.get_xy_by_prop((0.37 + i * 0.15, 0.7)))
+cards.Card6(all_sprites, (20, 60))
+cards.Card4(all_sprites, (100, 60))
 
 
 while running:
