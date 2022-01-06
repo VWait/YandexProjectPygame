@@ -8,11 +8,11 @@ class Block(ABC):
     def __init__(self, size, pos0, props):
         self.block_size = size[0] * props[0], size[1] * props[1]
         self.block_pos0 = pos0
-        self.color = (0, 0, 0)
+        self.color_blip = (0, 0, 0)
 
     @abstractmethod
     def render(self, screen):
-        pygame.draw.rect(screen, self.color, self.block_pos0 + self.block_size)
+        pygame.draw.rect(screen, self.color_blip, self.block_pos0 + self.block_size)
 
     def get_xy_by_prop(self, props):
         return tuple(map(lambda val, p: val * p, self.block_size, props))
