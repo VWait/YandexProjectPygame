@@ -39,24 +39,29 @@ class Card3(Card):
 
 
 class Card4(Card):
-    pass
+    def move(self):
+        # изменения в строчках 84, 87, 92, 96, 101
+        self.game.players_activity[self.game.player_i] = False
 
 
 class Card5(Card):
     def move(self):
-        selected_player_i = int(input('Pick one player: ' + ' '.join([str(i) for i in range(1, self.game.count_players + 1)]))) - 1
+        selected_player_i = self.game.choice_player(self.game.count_players)
         self.game.players[selected_player_i].card.value = self.game.deck.get_and_pop_card()
 
 
 class Card6(Card):
     def move(self):
         selected_player_i = self.game.choice_other_player(self.game.count_players, self.game.player_i)
+        free_player = self.game.players[selected_player_i].card.value
         self.game.players[selected_player_i].card.value = self.game.players[self.game.player_i].card.value
-        self.game.players[self.game.player_i].card.value = self.game.players[selected_player_i].card.value
+        self.game.players[self.game.player_i].card.value = free_player
 
 
 class Card7(Card):
-    pass
+    def move(self):
+        # изменения в 136-148 строчках
+        return
 
 
 class Card8(Card):
@@ -76,20 +81,25 @@ class Game:
         self.count_players = 3
         self.players = [Player(self.deck.get_and_pop_card()) for i in range(self.count_players)]
         self.player_i = 0
+        self.players_activity = [True for i in range(self.count_players)]
 
     def game_cycle(self):
+        activity = self.players_activity
         while len(self.deck.deck) > 0:
             print([p.card.value for p in self.players])
             self.players[self.player_i].move(self.deck)
             self.player_i = (self.player_i + 1) % self.count_players
+            self.players_activity = activity
 
     def choice_player(self, cnt_ps):
         """return player number"""
-        return int(input('Pick one player: ' + ' '.join([str(i) for i in range(1, cnt_ps + 1)]))) - 1
+        return int(input('Pick one player: ' + ' '.join([str(i) for i in range(1, cnt_ps + 1)\
+                                                         if self.players_activity[p_i] is True]))) - 1
 
     def choice_other_player(self, cnt_ps, p_i):
         """return player number"""
-        return int(input('Pick one player: ' + ' '.join([str(i) for i in range(1, cnt_ps + 1) if i - 1 != p_i]))) - 1
+        return int(input('Pick one player: ' + ' '.join([str(i) for i in range(1, cnt_ps + 1)\
+                                                         if i - 1 != p_i if self.players_activity[p_i] is True]))) - 1
 
     def choice_card_value(self):
         """return card number"""
@@ -123,8 +133,17 @@ class Player:
         self.card = [self.card, dk.get_and_pop_card()]  # player take one more card
         self.choice_of_card()
 
+    def card_selection(self):
+        """return selected card"""
+        return int(input(f'0({self.card[0].value}) или 1({self.card[1].value})'))
+
     def choice_of_card(self):
-        choice = int(input(f'0({self.card[0].value}) или 1({self.card[1].value})'))
+        choice = self.card_selection()
+        if (self.card[0].value in [5, 6] or self.card[1].value in [5, 6]) and\
+                (self.card[0].value == 7 or self.card[1].value == 7):
+            while choice != 7:
+                print("You can't discard this card")
+                choice = self.card_selection()
         self.card[choice].move()  # discard one card
         self.card = self.card[(choice + 1) % 2]  # save other card
 
