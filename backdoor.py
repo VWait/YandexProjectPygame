@@ -25,7 +25,17 @@ class Card2(Card):
 
 
 class Card3(Card):
-    pass
+    def move(self):
+        selected_player_i = self.game.choice_other_player(self.game.count_players, self.game.player_i)
+        if self.game.players[selected_player_i].card.value <= self.game.players[self.game.player_i].card.value:
+            losing_player = selected_player_i
+        elif self.game.players[selected_player_i].card.value >= self.game.players[self.game.player_i].card.value:
+            losing_player = self.game.player_i
+        else:
+            return
+        print(f'Player {losing_player + 1} lose')
+        del self.game.players[losing_player]
+        self.game.count_players -= 1
 
 
 class Card4(Card):
@@ -33,11 +43,16 @@ class Card4(Card):
 
 
 class Card5(Card):
-    pass
+    def move(self):
+        selected_player_i = int(input('Pick one player: ' + ' '.join([str(i) for i in range(1, self.game.count_players + 1)]))) - 1
+        self.game.players[selected_player_i].card.value = self.game.deck.get_and_pop_card()
 
 
 class Card6(Card):
-    pass
+    def move(self):
+        selected_player_i = self.game.choice_other_player(self.game.count_players, self.game.player_i)
+        self.game.players[selected_player_i].card.value = self.game.players[self.game.player_i].card.value
+        self.game.players[self.game.player_i].card.value = self.game.players[selected_player_i].card.value
 
 
 class Card7(Card):
@@ -45,7 +60,11 @@ class Card7(Card):
 
 
 class Card8(Card):
-    pass
+    def move(self):
+        print(f'Player {self.game.player_i + 1} lose')
+        del self.game.players[self.game.player_i]
+        self.game.count_players -= 1
+
 
 
 class Game:
