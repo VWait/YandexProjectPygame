@@ -14,5 +14,5 @@ class Block(ABC):
     def render(self, screen):
         pygame.draw.rect(screen, self.color_blip, self.block_pos0 + self.block_size)
 
-    def get_xy_by_prop(self, props):
-        return tuple(map(lambda val, p: val * p, self.block_size, props))
+    def get_xy_by_prop(self, props, size_card):
+        return tuple(map(lambda val, p, s: val * p + s / 2, self.block_size, props, size_card))
