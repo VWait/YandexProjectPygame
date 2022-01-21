@@ -1,3 +1,5 @@
+import pygame.draw
+
 from spriteclass import Sprite
 
 
@@ -8,6 +10,11 @@ class Card(Sprite):
         self.image = self.load_image(f'card{self.value}.png')
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = pos0
+
+    def contour_card(self, screen):
+        block_pos0 = self.rect.x - 3, self.rect.y - 3
+        block_size_window = self.block_pos0[0] + self.rect[2] + 6, self.block_pos0[1] + self.rect[3] + 6
+        pygame.draw.rect(screen, (255, 255, 255), block_pos0 + block_size_window, width=3)
 
 
 class Card1(Card):

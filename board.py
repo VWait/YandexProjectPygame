@@ -37,6 +37,7 @@ class Board(Block):
     def render(self, screen):
         super().render(screen)
         self.first_player.render(screen)
+        # self.first_player.contour_window(screen)
         self.second_player.render(screen)
         self.third_player.render(screen)
         font = pygame.font.SysFont('cambria', self.size_letter)
@@ -69,3 +70,8 @@ class PlayerHand(Block):
     def render(self, screen):
         super().render(screen)
         pygame.draw.rect(screen, self.color_window, self.block_pos0 + self.block_size_window)
+
+    def contour_window(self, screen):
+        block_pos0 = self.block_pos0[0] - 3, self.block_pos0[1] - 3
+        block_size_window = self.block_size_window[0] + 6, self.block_size_window[1] + 6
+        pygame.draw.rect(screen, (255, 255, 255), block_pos0 + block_size_window, width=3)
