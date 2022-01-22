@@ -1,4 +1,5 @@
 import pygame.draw
+import math
 
 from abstractblock import Block
 
@@ -15,7 +16,7 @@ class Board(Block):
         self.color_blip = (175, 214, 255)
         self.color_letter = (255, 255, 255)
         self.size_letter = 20
-        distance_border = 25
+        distance_border = 35
 
         self.help_blip_size = self.block_size[0] * 0.25, self.block_size[1] * 0.1
         self.help_blip_pos0 = self.block_pos0[0] + 10, self.block_size[1] - self.help_blip_size[1] - 10
@@ -60,18 +61,42 @@ class Board(Block):
         # screen.blit(text6, (self.start_blip_pos0[0] + 35, self.start_blip_pos0[1] + 17))
 
 
-class PlayerHand(Block):
+class PlayerHand(Block): 
     def __init__(self, size, pos0):
         super().__init__(size, pos0, (1, 1))
         self.block_size_window = size
         self.block_pos0 = pos0
         self.color_window = (113, 130, 255)
+        self.color_name = (205, 255, 255)
+        self.name_window = self.block_size_window[0], self.block_size_window[1] / 6
 
     def render(self, screen):
         super().render(screen)
         pygame.draw.rect(screen, self.color_window, self.block_pos0 + self.block_size_window)
+        pygame.draw.rect(screen, self.color_name, self.block_pos0 + self.name_window)
+        # self.cards_played(screen, [1, 1, 1, 1, 1])
 
     def contour_window(self, screen):
         block_pos0 = self.block_pos0[0] - 3, self.block_pos0[1] - 3
         block_size_window = self.block_size_window[0] + 6, self.block_size_window[1] + 6
         pygame.draw.rect(screen, (255, 255, 255), block_pos0 + block_size_window, width=3)
+
+    def get_pos0(self, n):
+        ratio = (3.5, 1.55, 4)
+        cards = [(self.block_pos0[0] + self.block_size_window[0] / ratio[i],
+                  self.block_pos0[1] + self.block_size_window[1] / ratio[2]) for i in range(1, n + 1)]
+        return cards
+
+    def cards_played(self, screen, cards):
+        radius = 12.5
+        ratio = (6, 5)
+        pos0 = (35, 60)
+        count_card = 0
+        for i in range(math.ceil(len(cards) / 2)):
+            for j in range(2):
+                count_card += 1
+                pygame.draw.circle(screen, (255, 255, 255), (pos0[0] + (ratio[0] + radius) * (j + 1) + radius * j,
+                                                             pos0[1] + (ratio[1] + radius) * (i + 1) + radius * i),
+                                   radius, 0)
+                if count_card == len(cards):
+                    break
