@@ -10,6 +10,14 @@ class Card(Sprite):
         self.image = self.load_image(f'card{self.value}.png')
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = pos0
+        self.clicked = 0
+
+    def click(self, screen):
+        self.clicked = (self.clicked + 1) % 2
+        if celf.clicked == 1:
+            self.contour_card(screen)
+        else:
+            self.move()
 
     def contour_card(self, screen):
         block_pos0 = self.rect.x - 3, self.rect.y - 3
