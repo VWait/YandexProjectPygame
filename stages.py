@@ -42,7 +42,12 @@ class Stages:
             self.game.stage = 'end'
 
     def end_game(self, event):
-        pass
+        if len(self.game.players) == 1 and self.game.players[0] == 'user.You.0':
+            self.game.label = 'Вы выиграли'
+        elif len(self.game.players) == 2 and 'user.You.0' not in self.game.players:
+            self.game.label = 'Вы проиграли'
+        else:
+            self.game.label = 'Начать игру'
 
     def execute_stage_by_name(self, name, event):
         self.names_stages[name](event)

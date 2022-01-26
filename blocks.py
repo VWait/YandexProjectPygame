@@ -7,23 +7,25 @@ pygame.font.init()
 
 class Block:
     def __init__(self, pos0, props, parent):
+        self.hint = {'start': 'Начало игры', 'choice_card': 'Выберите карту',
+                     'end': 'Конец игры', 'choice_player': 'Выберите игрока',
+                     'next_turn': 'Ходит соперник', 'choice_number': 'Выберите цифру'}
+        self.hint_step = 'start'
+        self.font = pygame.font.SysFont('cambria', 20)
         self.size = tuple(map(lambda x, y: x * y, parent.size, props))
         self.pos0 = pos0
         self.color = (175, 214, 255)
         self.blip_color = (53, 177, 255)
-
-        self.help_size = self.size[0] * 0.25, self.size[1] * 0.1
-        self.help_pos0 = self.pos0[0] + 10, self.size[1] - self.help_size[1] - 10
-        self.start_size = self.help_size
-        self.start_pos0 = self.size[0] - self.help_size[0] - 10, self.help_pos0[1]
+        self.radius = 10
 
     def render(self, screen):
         pygame.draw.rect(screen, self.color, self.pos0 + self.size)
-#        pygame.draw.rect(screen, self.blip_color, self.help_pos0 + self.help_size)
-#        pygame.draw.rect(screen, self.blip_color, self.start_pos0 + self.start_size)
 
     def get_pos0_by_prop(self, props, size_child):
         return tuple(map(lambda val, p, s: val * p - s / 2, self.size, props, size_child))
+
+    def begin(self, screen):
+        pass
 
 
 class Window:
@@ -35,6 +37,12 @@ class Window:
 class Board(Block):
     def __init__(self, pos0, props, parent):
         super().__init__(pos0, props, parent)
+        self.help_size = self.size[0] * 0.25, self.size[1] * 0.1
+        self.help_pos0 = self.pos0[0] + 10, self.size[1] - self.help_size[1] - 10
+        self.start_size = self.help_size
+        self.start_pos0 = self.size[0] - self.help_size[0] - 10, self.help_pos0[1]
+        self.color_letter = (255, 255, 255)
+
         distance_border = 40
         hand_size = self.size[0] * 0.4, self.size[1] * 0.3
         point1 = self.pos0[0] + distance_border, self.pos0[1] + distance_border
@@ -47,6 +55,10 @@ class Board(Block):
         super(Board, self).render(screen)
         pygame.draw.rect(screen, self.blip_color, self.help_pos0 + self.help_size)
         pygame.draw.rect(screen, self.blip_color, self.start_pos0 + self.start_size)
+        text_start = self.font.render('Новая игра', True, self.color_letter)
+        screen.blit(text_start, (self.start_pos0[0] + 35, self.start_pos0[1] + 11))
+        text_help = self.font.render(self.hint[self.hint_step], True, self.color_letter)
+        screen.blit(text_help, (self.help_pos0[0] + 5, self.help_pos0[1] + 11))
 
     def get_hand_by_number(self, slot):
         return PlayerHand(self.slots_points[slot], self)
@@ -60,9 +72,7 @@ class PlayerHand(Block):
         self.clicked = 0
         self.color_name = (205, 255, 255)
         self.rect_name = self.size[0], self.size[1] / 6
-        self.font = pygame.font.SysFont('cambria', 20)
         self.circles = []
-        self.radius = 10
         self.now_circle = (0, 0)
 
     def get_pos0_card(self, n):
@@ -100,7 +110,7 @@ class PlayerHand(Block):
         for i in range(7):
             self.circles.append((rect[2] / 7 * i + rect[0] + self.radius * 2, self.rect[3] + self.rect[1] + rect[3] / 2))
             pygame.draw.circle(screen, (0, 255, 255), self.circles[i], self.radius, 0)
-            text = self.font.render(str(i + 1), True, (30, 30, 255))
+            text = self.font.render(str(i + 2), True, (30, 30, 255))
             screen.blit(text, (self.circles[i][0] - 5, self.circles[i][1] - 12))
 
     def contour_circle(self, xy, screen):

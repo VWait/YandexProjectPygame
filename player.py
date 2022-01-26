@@ -36,6 +36,17 @@ class Player:
                 if card.rect.collidepoint(pos):
                     card.click()
 
+    def click_begin(self, pos):
+        if math.sqrt((self.game.size[0] / 2 - pos[0]) ** 2 +\
+                     (self.game.size[1] * 0.45 - pos[1]) ** 2) <= self.hand.radius * 5:
+            self.game.repeat()
+
+    def click_blip(self, pos):
+        x, y = int(self.board.start_pos0[0]), int(self.board.start_pos0[1])
+        if pos[0] in range(x, x + int(self.board.start_size[0] + 1)) and \
+                pos[1] in range(y, y + int(self.board.start_size[1] + 1)):
+            self.game.stage = 'end'
+
     def click_hand(self, pos):
         if self.hand.rect.collidepoint(pos) and self not in self.game.protected_players:
             if self.hand.clicked == 0:

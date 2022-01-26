@@ -77,8 +77,9 @@ class Card2(Card):
         self.next_stage = 'choice_player'
 
     def effect(self, player, card, target, number):
-        if type(target) == Bot:
-            target.cards[0].reverse_self()
+        if player != target:
+            if type(target) == Bot:
+                target.cards[0].reverse_self()
 
 
 class Card3(Card):
@@ -108,9 +109,10 @@ class Card5(Card):
         self.next_stage = 'choice_player'
 
     def effect(self, player, card, target, number):
-        target.cards[0].kill()
-        target.cards[0] = None
-        self.parent.game.give_card(target)
+        if player != target:
+            target.cards[0].kill()
+            target.cards[0] = None
+            self.parent.game.give_card(target)
 
 
 class Card6(Card):

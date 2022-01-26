@@ -27,6 +27,9 @@ class Game:
         self.sgs = stages.Stages(self)
         self.stage = 'start'
         self.protected_players = []
+        self.label = 'Начать игру'
+        self.font = pygame.font.SysFont('arial', 50)
+        self.color = (113, 130, 255)
 
         """init elements"""
         self.init_players()
@@ -40,10 +43,20 @@ class Game:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    self.players[0].click_blip(event.pos)
+                    self.players[0].click_begin(event.pos)
                 self.sgs.execute_stage_by_name(self.stage, event)
-            self.screen.fill(pygame.Color((113, 130, 255)))
+                self.board.hint_step = self.stage
+            self.screen.fill(pygame.Color(self.color))
+            pygame.draw.circle(self.screen, (255, 255, 255),
+                               (self.size[0] / 2, self.size[1] * 0.45), self.board.radius * 5)
+            pygame.draw.polygon(self.screen, self.color, [[self.size[0] / 1.9, self.size[1] / 2.5],
+                                [self.size[0] / 2.2, self.size[1] * 0.45],
+                                [self.size[0] / 1.9, self.size[1] / 2]])
+            text = self.font.render(self.label, True, (255, 255, 255))
+            self.screen.blit(text, (self.size[0] * 0.35, self.size[1] * 0.65))
             self.render()
-            self.all_sprites.draw(self.screen)
             pygame.display.flip()
         pygame.quit()
 
@@ -60,8 +73,11 @@ class Game:
         self.players = ps
 
     def render(self):
+        if self.stage == 'end':
+            return
         self.board.render(self.screen)
         [p.render(self.screen) for p in self.players]
+        self.all_sprites.draw(self.screen)
 
     def give_card(self, p):
         card = self.deck.get_and_pop_card()
@@ -81,6 +97,9 @@ class Game:
         self.count_players -= 1
         if self.start_player_id == self.count_players:
             self.start_player_id -= 1
+
+    def repeat(self):
+        self.__init__()
 
 
 game = Game()
