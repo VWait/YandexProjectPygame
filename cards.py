@@ -121,8 +121,15 @@ class Card6(Card):
         self.next_stage = 'choice_player'
 
     def effect(self, player, card, target, number):
-        player.cards[player.get_index_other_card(card)],\
-            target.cards[0] = target.cards[0], player.cards[player.get_index_other_card(card)]
+        if player != target:
+            p_card = player.cards[player.get_index_other_card(card)]
+            t_card = target.cards[0]
+            p_card.parent = target
+            t_card.parent = player
+            player.cards[player.get_index_other_card(card)] = t_card
+            target.cards[0] = p_card
+            if t_card.now_image == 0 and type(player) != Bot:
+                t_card.reverse_self()
 
 
 class Card7(Card):
