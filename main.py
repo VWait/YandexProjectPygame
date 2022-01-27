@@ -50,12 +50,12 @@ class Game:
                 self.board.hint_step = self.stage
             self.screen.fill(pygame.Color(self.color))
             pygame.draw.circle(self.screen, (255, 255, 255),
-                               (self.size[0] / 2, self.size[1] * 0.45), self.board.radius * 5)
-            pygame.draw.polygon(self.screen, self.color, [[self.size[0] / 1.9, self.size[1] / 2.5],
-                                [self.size[0] / 2.2, self.size[1] * 0.45],
-                                [self.size[0] / 1.9, self.size[1] / 2]])
+                               (self.size[0] / 2, self.size[1] * 0.4), self.board.radius * 5, width=5)
+            pygame.draw.polygon(self.screen, (255, 255, 255), [[self.size[0] / 1.9, self.size[1] / 3],
+                                [self.size[0] / 2.2, self.size[1] * 0.4],
+                                [self.size[0] / 1.9, self.size[1] / 2.15]])
             text = self.font.render(self.label, True, (255, 255, 255))
-            self.screen.blit(text, (self.size[0] * 0.35, self.size[1] * 0.65))
+            self.screen.blit(text, (self.size[0] * 0.35, self.size[1] * 0.6))
             self.render()
             pygame.display.flip()
         pygame.quit()

@@ -37,9 +37,10 @@ class Player:
                     card.click()
 
     def click_begin(self, pos):
-        if math.sqrt((self.game.size[0] / 2 - pos[0]) ** 2 +\
-                     (self.game.size[1] * 0.45 - pos[1]) ** 2) <= self.hand.radius * 5:
-            self.game.repeat()
+        if self.game.stage == 'end':
+            if math.sqrt((self.game.size[0] / 2 - pos[0]) ** 2 +\
+                         (self.game.size[1] * 0.45 - pos[1]) ** 2) <= self.hand.radius * 5:
+                self.game.repeat()
 
     def click_blip(self, pos):
         x, y = int(self.board.start_pos0[0]), int(self.board.start_pos0[1])

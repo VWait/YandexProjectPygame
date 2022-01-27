@@ -121,8 +121,8 @@ class Card6(Card):
         self.next_stage = 'choice_player'
 
     def effect(self, player, card, target, number):
-        player.cards[player.get_index_other_card(card)], target.cards[0] = target.cards[0], \
-                                                                           player.cards[player.get_index_other_card(card)]
+        player.cards[player.get_index_other_card(card)],\
+            target.cards[0] = target.cards[0], player.cards[player.get_index_other_card(card)]
 
 
 class Card7(Card):
